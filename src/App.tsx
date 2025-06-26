@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import ResortDetail from "./pages/ResortDetail";
 import UserDashboard from "./pages/UserDashboard";
 import OwnerDashboard from "./pages/OwnerDashboard";
+import Subscriptions from "./pages/Subscriptions"; // Added import for Subscriptions page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/resort/:id" element={<ResortDetail />} />
           <Route path="/dashboard/user" element={<UserDashboard />} />
           <Route path="/dashboard/owner" element={<OwnerDashboard />} />
+          <Route path="/subscriptions" element={<Subscriptions />} /> {/* Added route for Subscriptions page */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
