@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,9 +13,14 @@ import {
   MapPin,
   Clock,
   Star,
-  QrCode
+  QrCode,
+  Gift,
+  Users as UsersIcon,
+  MessageCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LoyaltyRewards from '@/components/LoyaltyRewards';
+import Wishlist from '@/components/Wishlist';
 
 const UserDashboard = () => {
   const mockBookings = [
@@ -52,6 +56,38 @@ const UserDashboard = () => {
       location: "Switzerland",
       rating: 4.9,
       image: "/placeholder.svg"
+    }
+  ];
+
+  const personalizedRecommendations = [
+    {
+      id: 1,
+      name: "Ocean Vista Resort",
+      location: "Miami",
+      rating: 4.9,
+      reason: "Similar to Ocean Breeze Resort",
+      price: 199,
+      image: "/placeholder.svg"
+    },
+    {
+      id: 2,
+      name: "Tropical Paradise",
+      location: "Key West",
+      rating: 4.7,
+      reason: "Popular with families",
+      price: 149,
+      image: "/placeholder.svg"
+    }
+  ];
+
+  const groupBookings = [
+    {
+      id: 1,
+      resortName: "Family Fun Resort",
+      date: "2024-02-10",
+      groupSize: 6,
+      organizer: "You",
+      status: "pending_payment"
     }
   ];
 
@@ -117,11 +153,46 @@ const UserDashboard = () => {
           </Card>
         </div>
 
+        {/* Personalized Recommendations */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>For You</CardTitle>
+            <CardDescription>Resorts recommended based on your preferences</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {personalizedRecommendations.map((resort) => (
+                <div key={resort.id} className="border rounded-lg p-4">
+                  <img src={resort.image} alt={resort.name} className="w-full h-32 object-cover rounded mb-3" />
+                  <h3 className="font-semibold">{resort.name}</h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <MapPin className="h-4 w-4 mr-1" />
+                      {resort.location}
+                    </div>
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 text-yellow-500 mr-1" />
+                      {resort.rating}
+                    </div>
+                  </div>
+                  <p className="text-xs text-blue-600 mt-1">{resort.reason}</p>
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="font-bold">${resort.price}/day</span>
+                    <Button size="sm">Book Now</Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Content */}
         <Tabs defaultValue="bookings" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="bookings">Bookings</TabsTrigger>
             <TabsTrigger value="favorites">Favorites</TabsTrigger>
+            <TabsTrigger value="groups">Groups</TabsTrigger>
+            <TabsTrigger value="rewards">Rewards</TabsTrigger>
             <TabsTrigger value="subscription">Subscription</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
@@ -165,32 +236,51 @@ const UserDashboard = () => {
           </TabsContent>
 
           <TabsContent value="favorites">
+            <Wishlist />
+          </TabsContent>
+
+          <TabsContent value="groups">
             <Card>
               <CardHeader>
-                <CardTitle>Favorite Resorts</CardTitle>
-                <CardDescription>Your saved resorts for easy booking</CardDescription>
+                <CardTitle className="flex items-center">
+                  <UsersIcon className="h-5 w-5 mr-2" />
+                  Group Bookings
+                </CardTitle>
+                <CardDescription>Manage shared bookings with friends and family</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mockFavorites.map((resort) => (
-                    <div key={resort.id} className="border rounded-lg p-4">
-                      <img src={resort.image} alt={resort.name} className="w-full h-32 object-cover rounded mb-3" />
-                      <h3 className="font-semibold">{resort.name}</h3>
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MapPin className="h-4 w-4 mr-1" />
-                          {resort.location}
+                <div className="space-y-4">
+                  {groupBookings.map((booking) => (
+                    <div key={booking.id} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-semibold">{booking.resortName}</h3>
+                          <div className="flex items-center text-sm text-gray-600 mt-1">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            {booking.date}
+                            <UsersIcon className="h-4 w-4 ml-4 mr-1" />
+                            {booking.groupSize} people
+                          </div>
+                          <p className="text-sm text-gray-500 mt-1">Organized by {booking.organizer}</p>
                         </div>
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 text-yellow-500 mr-1" />
-                          {resort.rating}
+                        <div className="flex items-center space-x-3">
+                          <Badge variant="secondary">{booking.status.replace('_', ' ')}</Badge>
+                          <Button size="sm">Manage</Button>
                         </div>
                       </div>
                     </div>
                   ))}
+                  <Button variant="outline" className="w-full">
+                    <UsersIcon className="h-4 w-4 mr-2" />
+                    Create Group Booking
+                  </Button>
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="rewards">
+            <LoyaltyRewards />
           </TabsContent>
 
           <TabsContent value="subscription">
@@ -238,13 +328,19 @@ const UserDashboard = () => {
           </TabsContent>
 
           <TabsContent value="profile">
-            <Card>
-              <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
-                <CardDescription>Update your personal information</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Profile Information</CardTitle>
+                  <CardDescription>Update your personal information and interests</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-4 mb-6">
+                    <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
+                      <User className="h-8 w-8 text-gray-500" />
+                    </div>
+                    <Button variant="outline">Change Avatar</Button>
+                  </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">Full Name</label>
                     <input className="w-full p-3 border rounded-lg" defaultValue="John Doe" />
@@ -261,25 +357,59 @@ const UserDashboard = () => {
                     <label className="block text-sm font-medium mb-2">Location</label>
                     <input className="w-full p-3 border rounded-lg" defaultValue="New York, NY" />
                   </div>
-                </div>
-                <Button className="mt-4">Save Changes</Button>
-              </CardContent>
-            </Card>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Interests</label>
+                    <div className="flex flex-wrap gap-2">
+                      {["Swimming", "Relaxation", "Family Activities", "Water Sports", "Dining"].map((interest) => (
+                        <Badge key={interest} variant="outline" className="cursor-pointer">
+                          {interest}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <Button className="mt-4">Save Changes</Button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Concierge Support
+                  </CardTitle>
+                  <CardDescription>Get personalized assistance for your bookings</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <Button className="w-full">Start Chat with Support</Button>
+                    <Button variant="outline" className="w-full">View FAQ</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="settings">
             <Card>
               <CardHeader>
                 <CardTitle>Settings</CardTitle>
-                <CardDescription>Manage your account preferences</CardDescription>
+                <CardDescription>Manage your account preferences and notifications</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <h4 className="font-semibold mb-3">Notifications</h4>
+                  <h4 className="font-semibold mb-3">Push Notifications</h4>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span>Booking confirmations</span>
                       <input type="checkbox" defaultChecked className="rounded" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Price drop alerts</span>
+                      <input type="checkbox" defaultChecked className="rounded" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>New resort notifications</span>
+                      <input type="checkbox" className="rounded" />
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Promotional offers</span>
@@ -305,6 +435,10 @@ const UserDashboard = () => {
                     <div className="flex items-center justify-between">
                       <span>Share analytics</span>
                       <input type="checkbox" className="rounded" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Location sharing</span>
+                      <input type="checkbox" defaultChecked className="rounded" />
                     </div>
                   </div>
                 </div>

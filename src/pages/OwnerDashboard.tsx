@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,9 +17,14 @@ import {
   TrendingUp,
   Clock,
   Star,
-  MapPin
+  MapPin,
+  MessageCircle,
+  UserPlus,
+  Megaphone
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AdvancedAnalytics from '@/components/AdvancedAnalytics';
+import PromotionsManager from '@/components/PromotionsManager';
 
 const OwnerDashboard = () => {
   const mockResorts = [
@@ -60,6 +64,31 @@ const OwnerDashboard = () => {
       date: "2024-01-16",
       amount: 199,
       status: "pending"
+    }
+  ];
+
+  const staffMembers = [
+    { id: 1, name: "Sarah Johnson", role: "Manager", resort: "Ocean Breeze Resort", active: true },
+    { id: 2, name: "Mike Chen", role: "Check-in Staff", resort: "Mountain View Paradise", active: true },
+    { id: 3, name: "Lisa Garcia", role: "Finance", resort: "All Resorts", active: false }
+  ];
+
+  const resortEvents = [
+    {
+      id: 1,
+      title: "Live Jazz Night",
+      resort: "Ocean Breeze Resort",
+      date: "2024-01-20",
+      time: "19:00",
+      status: "scheduled"
+    },
+    {
+      id: 2,
+      title: "Sunset Yoga Session",
+      resort: "Mountain View Paradise",
+      date: "2024-01-22",
+      time: "18:00",
+      status: "published"
     }
   ];
 
@@ -133,10 +162,13 @@ const OwnerDashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="resorts" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="resorts">My Resorts</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-8">
+            <TabsTrigger value="resorts">Resorts</TabsTrigger>
             <TabsTrigger value="bookings">Bookings</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="promotions">Promotions</TabsTrigger>
+            <TabsTrigger value="staff">Staff</TabsTrigger>
+            <TabsTrigger value="events">Events</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
@@ -243,92 +275,108 @@ const OwnerDashboard = () => {
           </TabsContent>
 
           <TabsContent value="analytics">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Revenue Analytics</CardTitle>
-                  <CardDescription>Monthly revenue breakdown</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <p className="text-gray-500">Revenue Chart Placeholder</p>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Booking Trends</CardTitle>
-                  <CardDescription>Booking volume over time</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <p className="text-gray-500">Booking Chart Placeholder</p>
-                  </div>
-                </CardContent>
-              </Card>
+            <AdvancedAnalytics />
+          </TabsContent>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Top Performing Resorts</CardTitle>
-                  <CardDescription>Resort performance comparison</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {mockResorts.map((resort, index) => (
-                      <div key={resort.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{resort.name}</p>
-                          <p className="text-sm text-gray-600">{resort.bookings} bookings</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold">${resort.revenue.toLocaleString()}</p>
-                          <div className="flex items-center">
-                            <Star className="h-3 w-3 text-yellow-500 mr-1" />
-                            <span className="text-sm">{resort.rating}</span>
-                          </div>
-                        </div>
+          <TabsContent value="promotions">
+            <PromotionsManager />
+          </TabsContent>
+
+          <TabsContent value="staff">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <UserPlus className="h-5 w-5 mr-2" />
+                      Staff Management
+                    </CardTitle>
+                    <CardDescription>Manage staff accounts and permissions</CardDescription>
+                  </div>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Staff Member
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {staffMembers.map((staff) => (
+                    <div key={staff.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h3 className="font-semibold">{staff.name}</h3>
+                        <p className="text-sm text-gray-600">{staff.role} • {staff.resort}</p>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Customer Demographics</CardTitle>
-                  <CardDescription>Visitor insights</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-gray-600 mb-2">Age Groups</p>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span>18-25</span>
-                          <span>25%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>26-35</span>
-                          <span>45%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>36-50</span>
-                          <span>30%</span>
-                        </div>
+                      <div className="flex items-center space-x-3">
+                        <Badge variant={staff.active ? 'default' : 'secondary'}>
+                          {staff.active ? 'Active' : 'Inactive'}
+                        </Badge>
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="events">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <Calendar className="h-5 w-5 mr-2" />
+                      Resort Events
+                    </CardTitle>
+                    <CardDescription>Schedule and manage resort events and activities</CardDescription>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Schedule Event
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {resortEvents.map((event) => (
+                    <div key={event.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h3 className="font-semibold">{event.title}</h3>
+                        <p className="text-sm text-gray-600">{event.resort}</p>
+                        <div className="flex items-center text-sm text-gray-500 mt-1">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          {event.date} at {event.time}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Badge variant={event.status === 'published' ? 'default' : 'secondary'}>
+                          {event.status}
+                        </Badge>
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        {event.status === 'scheduled' && (
+                          <Button size="sm">
+                            <Megaphone className="h-4 w-4 mr-1" />
+                            Publish
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="payments">
             <Card>
               <CardHeader>
                 <CardTitle>Payment Management</CardTitle>
-                <CardDescription>View earnings and payout information</CardDescription>
+                <CardDescription>View earnings and payout information with dynamic pricing tools</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -344,6 +392,47 @@ const OwnerDashboard = () => {
                     <h3 className="font-semibold text-gray-800">Total Earnings</h3>
                     <p className="text-2xl font-bold text-gray-600">$45,230.00</p>
                   </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-3">Dynamic Pricing</h4>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h5 className="font-medium mb-2">Pricing Rules</h5>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span>Peak Season (Jun-Aug)</span>
+                              <Badge>+25%</Badge>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Weekends</span>
+                              <Badge>+15%</Badge>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>High Demand</span>
+                              <Badge>+20%</Badge>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <h5 className="font-medium mb-2">Revenue Optimization</h5>
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span>Revenue Increase</span>
+                              <span className="font-bold text-green-600">+18.5%</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span>Occupancy Rate</span>
+                              <span className="font-bold">78%</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="outline" className="mt-4">Configure Pricing Rules</Button>
+                    </CardContent>
+                  </Card>
                 </div>
 
                 <div>
@@ -370,55 +459,92 @@ const OwnerDashboard = () => {
           </TabsContent>
 
           <TabsContent value="settings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
-                <CardDescription>Manage your business account preferences</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-3">Business Information</h4>
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Business Information</CardTitle>
+                  <CardDescription>Manage your business account preferences</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Business Name</label>
+                    <input className="w-full p-3 border rounded-lg" defaultValue="Paradise Resorts LLC" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Contact Email</label>
+                    <input className="w-full p-3 border rounded-lg" defaultValue="owner@paradiseresorts.com" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone Number</label>
+                    <input className="w-full p-3 border rounded-lg" defaultValue="+1 234 567 8900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Tax ID</label>
+                    <input className="w-full p-3 border rounded-lg" defaultValue="XX-XXXXXXX" />
+                  </div>
+                </div>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Communication Hub
+                  </CardTitle>
+                  <CardDescription>Manage visitor communications and announcements</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Business Name</label>
-                      <input className="w-full p-3 border rounded-lg" defaultValue="Paradise Resorts LLC" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Contact Email</label>
-                      <input className="w-full p-3 border rounded-lg" defaultValue="owner@paradiseresorts.com" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Phone Number</label>
-                      <input className="w-full p-3 border rounded-lg" defaultValue="+1 234 567 8900" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Tax ID</label>
-                      <input className="w-full p-3 border rounded-lg" defaultValue="XX-XXXXXXX" />
+                    <Button className="h-20 flex flex-col items-center justify-center">
+                      <MessageCircle className="h-6 w-6 mb-2" />
+                      Direct Messages
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+                      <Megaphone className="h-6 w-6 mb-2" />
+                      Send Announcement
+                    </Button>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <h4 className="font-medium mb-2">Recent Messages</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>John D. - Ocean Breeze Resort</span>
+                        <span className="text-gray-500">2 hours ago</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Sarah M. - Mountain View Paradise</span>
+                        <span className="text-gray-500">1 day ago</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div>
-                  <h4 className="font-semibold mb-3">Notification Preferences</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span>New booking notifications</span>
-                      <input type="checkbox" defaultChecked className="rounded" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Payment notifications</span>
-                      <input type="checkbox" defaultChecked className="rounded" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Marketing communications</span>
-                      <input type="checkbox" className="rounded" />
+              <Card>
+                <CardHeader>
+                  <CardTitle>Notification Preferences</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div>
+                    <h4 className="font-semibold mb-3">Notification Preferences</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span>New booking notifications</span>
+                        <input type="checkbox" defaultChecked className="rounded" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Payment notifications</span>
+                        <input type="checkbox" defaultChecked className="rounded" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Marketing communications</span>
+                        <input type="checkbox" className="rounded" />
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <Button>Save Settings</Button>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
