@@ -482,7 +482,7 @@ const OwnerDashboard = () => {
                     <label className="block text-sm font-medium mb-2">Tax ID</label>
                     <input className="w-full p-3 border rounded-lg" defaultValue="XX-XXXXXXX" />
                   </div>
-                </div>
+                </CardContent>
               </Card>
 
               <Card>
